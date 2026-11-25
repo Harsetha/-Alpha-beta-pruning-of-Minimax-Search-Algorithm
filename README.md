@@ -1,6 +1,6 @@
 <h1>ExpNo 7 : Implement Alpha-beta pruning of Minimax Search Algorithm for a Simple TIC-TAC-TOE game</h1> 
-<h3>Name:       </h3>
-<h3>Register Number/Staff Id:           </h3>
+<h3>Name:   HARSETHA J    </h3>
+<h3>Register Number: 212223220032         </h3>
 <H3>Aim:</H3>
 <p>
 Implement Alpha-beta pruning of Minimax Search Algorithm for a Simple TIC-TAC-TOE game
@@ -31,4 +31,132 @@ When added to a simple minimax algorithm, it gives the same output but cuts off 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/440797bd-53cb-49c1-b18d-89776864c3e7)
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/81575a16-26b2-46f1-a8ac-27c9ed0a0fe5)
 
+# PROGRAM
+```
+import math
 
+# Board represented as a list of 9 spaces
+board = [" " for _ in range(9)]
+
+
+def print_board():
+  print()
+  for i in range(0, 9, 3):
+    print(f" {board[i]} | {board[i+1]} | {board[i+2]} ")
+    if i < 6:
+      print("---|---|---")
+  print()
+
+
+def check_winner(player):
+  win_combos = [
+      (0, 1, 2),
+      (3, 4, 5),
+      (6, 7, 8),  # Rows
+      (0, 3, 6),
+      (1, 4, 7),
+      (2, 5, 8),  # Columns
+      (0, 4, 8),
+      (2, 4, 6),  # Diagonals
+  ]
+  return any(board[a] == board[b] == board[c] == player for a, b, c in win_combos)
+
+
+def is_draw():
+  return " " not in board
+
+
+# Minimax algorithm with Alpha-Beta Pruning
+def minimax(depth, is_maximizing, alpha, beta):
+  if check_winner("O"):  # AI wins
+    return 10 - depth
+  if check_winner("X"):  # Human wins
+    return depth - 10
+  if is_draw():
+    return 0
+
+  if is_maximizing:
+    best_score = -math.inf
+    for i in range(9):
+      if board[i] == " ":
+        board[i] = "O"
+        score = minimax(depth + 1, False, alpha, beta)
+        board[i] = " "
+        best_score = max(best_score, score)
+        alpha = max(alpha, best_score)
+        if beta <= alpha:  # Alpha-Beta Pruning
+          break
+    return best_score
+  else:
+    best_score = math.inf
+    for i in range(9):
+      if board[i] == " ":
+        board[i] = "X"
+        score = minimax(depth + 1, True, alpha, beta)
+        board[i] = " "
+        best_score = min(best_score, score)
+        beta = min(beta, best_score)
+        if beta <= alpha:  # Alpha-Beta Pruning
+          break
+    return best_score
+
+
+def best_move():
+  best_score = -math.inf
+  move = -1
+  for i in range(9):
+    if board[i] == " ":
+      board[i] = "O"
+      score = minimax(0, False, -math.inf, math.inf)
+      board[i] = " "
+      if score > best_score:
+        best_score = score
+        move = i
+  board[move] = "O"
+
+
+# Main game loop
+print("Tic-Tac-Toe: You are X, Computer is O")
+print("Positions are 1 to 9 (top-left to bottom-right)")
+print_board()
+
+while True:
+  # Human Turn
+  try:
+    pos = int(input("Enter your move (1-9): ")) - 1
+    if pos < 0 or pos > 8 or board[pos] != " ":
+      print("Invalid move! Try again.")
+      continue
+  except ValueError:
+    print("Please enter a valid number between 1 and 9.")
+    continue
+
+  board[pos] = "X"
+  print_board()
+
+  if check_winner("X"):
+    print("You win!")
+    break
+  if is_draw():
+    print("It's a draw!")
+    break
+
+  # Computer Turn
+  print("Computer is thinking...")
+  best_move()
+  print_board()
+
+  if check_winner("O"):
+    print("Computer wins!")
+    break
+  if is_draw():
+    print("It's a draw!")
+    break
+```
+# OUTPUT
+
+<img width="725" height="663" alt="image" src="https://github.com/user-attachments/assets/0576bd90-cfab-4f23-80e4-12f95f4acdc6" />
+
+# RESULT
+
+Thus, the Tic-Tac-Toe game using the Minimax Algorithm with Alpha-Beta Pruning was successfully implemented in Python.
