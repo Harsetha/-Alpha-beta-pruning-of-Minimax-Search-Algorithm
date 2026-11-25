@@ -34,11 +34,7 @@ When added to a simple minimax algorithm, it gives the same output but cuts off 
 # PROGRAM
 ```
 import math
-
-# Board represented as a list of 9 spaces
 board = [" " for _ in range(9)]
-
-
 def print_board():
   print()
   for i in range(0, 9, 3):
@@ -46,31 +42,24 @@ def print_board():
     if i < 6:
       print("---|---|---")
   print()
-
-
 def check_winner(player):
   win_combos = [
       (0, 1, 2),
       (3, 4, 5),
-      (6, 7, 8),  # Rows
+      (6, 7, 8), 
       (0, 3, 6),
       (1, 4, 7),
-      (2, 5, 8),  # Columns
+      (2, 5, 8), 
       (0, 4, 8),
-      (2, 4, 6),  # Diagonals
+      (2, 4, 6),  
   ]
   return any(board[a] == board[b] == board[c] == player for a, b, c in win_combos)
-
-
 def is_draw():
   return " " not in board
-
-
-# Minimax algorithm with Alpha-Beta Pruning
 def minimax(depth, is_maximizing, alpha, beta):
-  if check_winner("O"):  # AI wins
+  if check_winner("O"):  
     return 10 - depth
-  if check_winner("X"):  # Human wins
+  if check_winner("X"):  
     return depth - 10
   if is_draw():
     return 0
@@ -84,7 +73,7 @@ def minimax(depth, is_maximizing, alpha, beta):
         board[i] = " "
         best_score = max(best_score, score)
         alpha = max(alpha, best_score)
-        if beta <= alpha:  # Alpha-Beta Pruning
+        if beta <= alpha:  
           break
     return best_score
   else:
@@ -96,7 +85,7 @@ def minimax(depth, is_maximizing, alpha, beta):
         board[i] = " "
         best_score = min(best_score, score)
         beta = min(beta, best_score)
-        if beta <= alpha:  # Alpha-Beta Pruning
+        if beta <= alpha:  
           break
     return best_score
 
@@ -114,14 +103,11 @@ def best_move():
         move = i
   board[move] = "O"
 
-
-# Main game loop
 print("Tic-Tac-Toe: You are X, Computer is O")
 print("Positions are 1 to 9 (top-left to bottom-right)")
 print_board()
 
 while True:
-  # Human Turn
   try:
     pos = int(input("Enter your move (1-9): ")) - 1
     if pos < 0 or pos > 8 or board[pos] != " ":
@@ -141,7 +127,6 @@ while True:
     print("It's a draw!")
     break
 
-  # Computer Turn
   print("Computer is thinking...")
   best_move()
   print_board()
